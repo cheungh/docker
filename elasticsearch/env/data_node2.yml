@@ -1,0 +1,15 @@
+cluster.name: "production-cluster"
+node.name: "es_datanode2"
+node.data: true
+node.master: false
+
+
+transport.tcp.port: 9300
+discovery.zen.minimum_master_nodes: 1
+discovery.zen.ping.unicast.hosts: ["es_master1:9300","es_master2:9300"]
+discovery.zen.ping.timeout: 5s
+bootstrap.mlockall: true 
+action.destructive_requires_name: true 
+#For allowing script execution
+script.inline: on
+path.repo: ["/backup"]

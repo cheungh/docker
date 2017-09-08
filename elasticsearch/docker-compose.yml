@@ -1,0 +1,117 @@
+version: '2'
+
+services:
+  es_master1:
+    image: elasticsearch
+    container_name: es_master1
+    ports:
+      - "9205:9200/tcp"
+      - "9305:9300/tcp"
+    volumes:
+      - es_masterdata1:/opt/elasticsearch/data
+      - ${PWD}/env/master1.yml:/opt/elasticsearch/config/elasticsearch.yml
+      - backup:/backup
+    #extra_hosts:
+    #  - "es_master1:172.16.0.2"
+    #  - "es_master2:172.16.0.3"
+    networks:
+      - app_net
+
+  es_master2:
+    image: elasticsearch
+    container_name: es_master2
+    ports:
+      - "9201:9200/tcp"
+      - "9301:9300/tcp"
+    volumes:
+      - es_masterdata2:/opt/elasticsearch/data
+      - ${PWD}/env/master2.yml:/opt/elasticsearch/config/elasticsearch.yml
+      - backup:/backup
+
+    #extra_hosts:
+    #  - "es_master1:172.16.0.2"
+    #  - "es_master2:172.16.0.3"
+    networks:
+      - app_net
+
+      
+  es_datanode1:
+    image: elasticsearch
+    container_name: es_datanode1
+    ports:
+      - "9202:9200/tcp"
+      - "9302:9300/tcp"
+
+    #extra_hosts:
+    #  - "es_master1:172.16.0.2"
+    #  - "es_master2:172.16.0.3"
+
+    volumes:
+      - es_data_v1:/opt/elasticsearch/data
+      - ${PWD}/env/data_node1.yml:/opt/elasticsearch/config/elasticsearch.yml
+      - backup:/backup
+    networks:
+      - app_net
+
+  es_datanode2:
+    image: elasticsearch
+    container_name: es_datanode2
+    ports:
+      - "9203:9200/tcp"
+      - "9303:9300/tcp"
+
+    volumes:
+      - es_data_v2:/opt/elasticsearch/data
+      - ${PWD}/env/data_node2.yml:/opt/elasticsearch/config/elasticsearch.yml
+      - backup:/backup
+    networks:
+      - app_net
+
+  es_datanode3:
+    image: elasticsearch
+    container_name: es_datanode3
+    ports:
+      - "9204:9200/tcp"
+      - "9304:9300/tcp"
+
+    volumes:
+      - es_data_v3:/opt/elasticsearch/data
+      - ${PWD}/env/data_node3.yml:/opt/elasticsearch/config/elasticsearch.yml
+      - backup:/backup
+    networks:
+      - app_net
+
+  es_clientnode1:
+    image: elasticsearch
+    container_name: es_clientnode1
+    ports:
+      - "9200:9200/tcp"
+      - "9300:9300/tcp"
+
+    volumes:
+      - es_client_v1:/opt/elasticsearch/data
+      - ${PWD}/env/client_node.yml:/opt/elasticsearch/config/elasticsearch.yml
+    networks:
+      - app_net
+
+volumes:
+  es_masterdata1:
+  es_masterdata2:
+  es_data_v1:
+  es_data_v2:
+  es_data_v3:
+  es_client_v1:
+  backup:
+  
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.1
+          #aux_addresses:
+          #  es_master1: 172.16.0.2
+          #  es_master2: 172.16.0.3
+          #  es_datanode1: 172.16.0.4

@@ -1,0 +1,16 @@
+cluster.name: "production-cluster"
+node.name: "es_master2"
+node.data: false
+node.master: true
+
+#network.host: "192.168.1.10" (should be changed to a private IP address of this machine or can be left out too, because Elasticsearch, by default, binds itself to the 0.0.0.0 address)
+#http.enabled: false
+transport.tcp.port: 9300
+discovery.zen.minimum_master_nodes: 1
+discovery.zen.ping.unicast.hosts: ["es_master1", "es_master2"]
+discovery.zen.ping.timeout: 5s
+bootstrap.mlockall: true 
+action.destructive_requires_name: true 
+#For allowing script execution
+script.inline: on
+path.repo: ["/backup"]

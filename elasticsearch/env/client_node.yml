@@ -1,0 +1,14 @@
+cluster.name: "production-cluster"
+node.name: "es_clientnode1"
+node.master: false 
+node.data: false
+node.client: true
+
+transport.tcp.port: 9300
+discovery.zen.minimum_master_nodes: 1
+discovery.zen.ping.unicast.hosts: ["es_master1:9300","es_master2:9300"]
+discovery.zen.ping.timeout: 5s
+bootstrap.mlockall: true 
+action.destructive_requires_name: true 
+#For allowing script execution
+script.inline: on
